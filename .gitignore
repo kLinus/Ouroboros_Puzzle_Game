@@ -1,0 +1,9 @@
+*.csproj
+*.pidb
+*.sln
+*.userprefs
+*.dll
+Temp
+Library/ScriptAssemblies/*
+Library/cache/*
+Library/assetDatabase3
