@@ -8,7 +8,7 @@ public class BodyPieceScript : MonoBehaviour {
 	public float percentInterpolation;
 	public float speed;
 	public float rotationSpeed;
-	public GameObject head;
+	public GameObject head, tail;
 	
 	// Private variables.
 	Vector3 velocity;
