@@ -9,6 +9,10 @@ public class PlayerScript : MonoBehaviour {
 	public float rotationForce;
 	public float moveForce;
 	
+	//Private variables
+	private bool burstOfSpeedEnabled = false;
+	private bool burstOfSpeedInUse = false;
+	
 	void Awake () {
 		head.gameObject.layer = LayerMask.NameToLayer("Player" + playerIndex);
 	}
@@ -34,5 +38,9 @@ public class PlayerScript : MonoBehaviour {
 		{
 			this.rigidbody.AddForce(Time.fixedDeltaTime * moveForce * -this.transform.forward);
 		}
+	}
+	
+	void ToggleBurstOfSpeed() {
+		burstOfSpeedEnabled = !burstOfSpeedEnabled;
 	}
 }
