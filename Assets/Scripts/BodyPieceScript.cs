@@ -7,6 +7,7 @@ public class BodyPieceScript : MonoBehaviour {
 	public float minDistance;
 	public float percentInterpolation;
 	public float speed;
+	public float rotationSpeed;
 	public GameObject head;
 	
 	// Private variables.
@@ -19,7 +20,7 @@ public class BodyPieceScript : MonoBehaviour {
 		Vector3 forwardDelta = head.transform.forward - this.transform.forward;
 		float deltaAngle = (Vector3.Cross(this.transform.forward, this.head.transform.forward).y < 0 ? -1 : 1) * Vector3.Angle(this.transform.forward, this.head.transform.forward);
 		if(head.GetComponent<HeadScript>() != null)Debug.Log(deltaAngle);
-		rotationalVelocity = Mathf.Lerp(this.rotationalVelocity, deltaAngle, percentInterpolation);
+		rotationalVelocity = rotationSpeed * Mathf.Lerp(this.rotationalVelocity, deltaAngle, percentInterpolation);
 		this.transform.position += Time.fixedDeltaTime * speed * velocity;
 		this.transform.rotation = Quaternion.AngleAxis(Time.fixedDeltaTime * rotationalVelocity, Vector3.up) * this.transform.rotation;
 	}

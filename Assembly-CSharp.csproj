@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\BodyPieceScript.cs" />
+     <Compile Include="Assets\Scripts\BoxScript.cs" />
      <Compile Include="Assets\Scripts\HeadScript.cs" />
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\SpriteScript.cs" />
