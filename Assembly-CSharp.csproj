@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{27E3B7BB-7210-4DB8-2CDE-8C5F9221D3B6}</ProjectGuid>
+	<ProjectGuid>{4816254F-4557-5E43-8785-8DD47284D1E2}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -46,6 +46,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\BodyPieceScript.cs" />
      <Compile Include="Assets\Scripts\HeadScript.cs" />
+     <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\SpriteScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
