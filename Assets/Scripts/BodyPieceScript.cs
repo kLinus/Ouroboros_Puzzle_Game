@@ -19,7 +19,7 @@ public class BodyPieceScript : MonoBehaviour {
 		velocity = Vector3.Lerp(this.velocity, deltaPos, percentInterpolation);
 		Vector3 forwardDelta = head.transform.forward - this.transform.forward;
 		float deltaAngle = (Vector3.Cross(this.transform.forward, this.head.transform.forward).y < 0 ? -1 : 1) * Vector3.Angle(this.transform.forward, this.head.transform.forward);
-		if(head.GetComponent<HeadScript>() != null)Debug.Log(deltaAngle);
+//		if(head.GetComponent<HeadScript>() != null)Debug.Log(deltaAngle);
 		rotationalVelocity = rotationSpeed * Mathf.Lerp(this.rotationalVelocity, deltaAngle, percentInterpolation);
 		this.transform.position += Time.fixedDeltaTime * speed * velocity;
 		this.transform.rotation = Quaternion.AngleAxis(Time.fixedDeltaTime * rotationalVelocity, Vector3.up) * this.transform.rotation;

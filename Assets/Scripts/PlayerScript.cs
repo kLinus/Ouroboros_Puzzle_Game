@@ -12,13 +12,14 @@ public class PlayerScript : MonoBehaviour {
 	public float burstOfSpeedMaxForce;
 	public float burstOfSpeedMultiplier;
 	public float burstOfSpeedCooldown;
+	public float realtime;
 	
 	//Burst of Speed abiltiy variables
 	private bool burstOfSpeedEnabled = true;
 	private bool burstOfSpeedInUse = false;
 	private bool burstOfSpeedOnCooldown = false;
 	private float defaultMoveForce;
-	private float burstOfSpeedLastCastTime;
+	private float burstOfSpeedLastCastTime = 0;
 	
 	//Repel ability variables
 	
@@ -30,15 +31,18 @@ public class PlayerScript : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
+		realtime = Time.realtimeSinceStartup;
 	
 		//Burst of Speed Ability
-		if((burstOfSpeedEnabled || burstOfSpeedInUse) && !burstOfSpeedOnCooldown)
+		if(burstOfSpeedEnabled || burstOfSpeedInUse)
 		{
-			bool shift = (playerIndex == 1 && Input.GetKey(KeyCode.LeftShift));
+			bool shift = (playerIndex == 1 && Input.GetKey(KeyCode.RightShift)) || (playerIndex == 2 && Input.GetKey(KeyCode.LeftShift));
+			
 			if( shift && !burstOfSpeedInUse)
 			{
 				burstOfSpeedInUse = true;
 				burstOfSpeedEnabled = false;
+				Debug.Log("Burst of Speed Now in Use for" + playerIndex);
 			}
 			else if (burstOfSpeedInUse)
 			{
@@ -46,14 +50,11 @@ public class PlayerScript : MonoBehaviour {
 				if(moveForce >= burstOfSpeedMaxForce)
 				{
 					moveForce = defaultMoveForce;
+					burstOfSpeedLastCastTime = Time.realtimeSinceStartup;
+					Debug.Log("Burst of Speed has completed for " +playerIndex);
 					burstOfSpeedInUse = false;
-					burstOfSpeedEnabled = true;
-					burstOfSpeedLastCastTime = 
+					burstOfSpeedOnCooldown = true;
 				}
-			}
-			else
-			{
-				moveForce = defaultMoveForce;
 			}
 		}
 		
@@ -80,6 +81,13 @@ public class PlayerScript : MonoBehaviour {
 		}
 		
 		//Check cooldowns
+		if (burstOfSpeedOnCooldown){
+			if (Time.realtimeSinceStartup - burstOfSpeedLastCastTime > burstOfSpeedCooldown)
+			{
+				burstOfSpeedEnabled = true;
+				Debug.Log("Burst of Speed is cooled down for" + playerIndex);
+			}
+		}
 		
 	}
 	
