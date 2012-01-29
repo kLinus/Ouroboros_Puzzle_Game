@@ -1,10 +1,11 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class BoxScript : MonoBehaviour {
 	
 	// Editor variables.
 	public GameObject leftWall, rightWall, topWall, bottomWall;
+	public List<GameObject> obstacles;
 	public BodyPieceScript bodyPiecePrefab;
 	public int initialPieces;
 	public float secondsPerPiece;
@@ -18,8 +19,8 @@ public class BoxScript : MonoBehaviour {
 		Vector3 bottomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0f));
 		leftWall.transform.position = new Vector3(topLeft.x, 0f, 0f);
 		rightWall.transform.position = new Vector3(bottomRight.x, 0f, 0f);
-		topWall.transform.position = new Vector3(0f, 0f, topLeft.z);
-		bottomWall.transform.position = new Vector3(0f, 0f, bottomRight.z);
+		topWall.transform.position = new Vector3(0f, 0f, bottomRight.z);
+		bottomWall.transform.position = new Vector3(0f, 0f, topLeft.z);
 		
 		for(int n = 0; n < initialPieces; n++){
 			SpawnRandomPiece();
@@ -28,6 +29,7 @@ public class BoxScript : MonoBehaviour {
 	}
 	
 	void FixedUpdate(){
+		if(!MenuScript.singleton.gameStarted) return;
 		timeLeftUntilSpawn -= Time.fixedDeltaTime;
 		if(timeLeftUntilSpawn <= 0f){
 			timeLeftUntilSpawn = secondsPerPiece;

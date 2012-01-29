@@ -25,11 +25,16 @@ public class RepelScript : MonoBehaviour {
 		if(repelIsArmed)
 		{
 			radius += Time.fixedDeltaTime * growthMultiplier;
+			this.transform.localScale = new Vector3(radius * 2f, 1f, radius * 2f);
+			this.transform.rotation *= Quaternion.AngleAxis(360f * Time.fixedDeltaTime, Vector3.up);
 			
-			if ((this.transform.position - targetPlayer.transform.position).magnitude <= radius)
+			float distance = (this.transform.position - targetPlayer.transform.position).magnitude;
+			if (distance <= radius)
 			{
 				Debug.Log(playerThatCastedRepel + " casted repel on " + targetPlayer.playerIndex);
+				currentForce = currentForce * (1f - distance / radius);
 				targetPlayer.gameObject.rigidbody.AddForce( currentForce * Vector3.Normalize(targetPlayer.transform.position - this.transform.position));
+				targetPlayer.gameObject.rigidbody.AddTorque( currentForce * targetPlayer.transform.up);
 				GameObject.Destroy(this.gameObject);
 			} else if (radius >= maxRange)
 			{
