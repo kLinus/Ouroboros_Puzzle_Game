@@ -35,11 +35,13 @@ public class PlayerScript : MonoBehaviour {
 	
 	[System.Serializable]
 	public class StraightenProperties{
+		public float rotationSpeed;
 		public float cooldown;
 	}public StraightenProperties Straighten;
 	
 	// Private variables.
 	private LinkedList<GameObject> pieces;
+	private LinkedListNode<GameObject> nextPiece;
 	private GameObject wing1, wing2;
 	private Color player1Color = new Color(0.23f, 0.96f, 0.64f);
 	private Color player2Color = new Color(0.58f, 0.98f, 0.21f);
@@ -59,6 +61,14 @@ public class PlayerScript : MonoBehaviour {
 	private bool repelEnabled = true;
 	private bool repelIsOnCooldown = false;
 	private float repelLastCastTime = 0;
+	
+	//Straighten ability variables
+	private bool straightenEnabled = true;
+	private bool straightenIsOnCooldown = false;
+	private bool isStraightening = false;
+	private int straightenIndex = 1;
+	private float nextTime;
+	private float straightenLastCastTime = 0;
 	
 	//Controls
 	private KeyCode p1_BurstOfSpeedKey = KeyCode.RightShift;
@@ -162,6 +172,40 @@ public class PlayerScript : MonoBehaviour {
 		#endregion
 		
 		//Straighten Ability
+		#region Straighten
+		if(straightenEnabled)
+		{
+			bool straightenButton = (playerIndex == 1 && Input.GetKey(p1_StraightenKey)) || (playerIndex == 2 && Input.GetKey(p2_StraightenKey));
+			
+			if (straightenButton && !isStraightening)
+			{
+				isStraightening = true;
+				straightenEnabled = false;
+				nextTime = Time.realtimeSinceStartup;
+				nextPiece = pieces.First.Next;
+			}
+		}
+		
+		if ((Time.realtimeSinceStartup - nextTime > 1) && isStraightening)
+		{	
+			if (straightenIndex < pieces.Count){
+				GameObject head = nextPiece.Previous.Value;
+				nextPiece.Value.transform.position = (head.transform.position - 1 * head.transform.forward);
+				nextPiece.Value.transform.rotation = head.transform.rotation;
+				nextTime = Time.realtimeSinceStartup;
+				straightenIndex++;
+				Debug.Log(nextTime);
+				nextPiece = nextPiece.Next;
+			}
+			else{
+				isStraightening = false;
+				straightenIsOnCooldown = true;
+				straightenLastCastTime = Time.realtimeSinceStartup;
+				nextPiece = pieces.First.Next;
+				straightenIndex = 1;
+			}
+		}
+		#endregion
 		
 		
 		//Movement
@@ -207,6 +251,16 @@ public class PlayerScript : MonoBehaviour {
 				//Debug.Log("Repel is cooled down for " + playerIndex);
 			}
 		}
+		
+		if (straightenIsOnCooldown){
+			if (Time.realtimeSinceStartup - straightenLastCastTime > Straighten.cooldown)
+			{
+				straightenEnabled = true;
+				straightenIsOnCooldown = false;
+				Debug.Log("You can straighten now!!");
+			}
+		}
+				
 		#endregion
 		
 		//Update wings.
@@ -270,12 +324,9 @@ public class PlayerScript : MonoBehaviour {
 		}
 	}
 	
-	private void ToggleBurstOfSpeedEnabled() {
-		burstOfSpeedEnabled = !burstOfSpeedEnabled;
-	}
-	
-	private void ToggleBurstOfSpeedInUse() {
-		burstOfSpeedInUse = !burstOfSpeedInUse;
+	public bool IsCastingStraighten
+	{
+		get{ return isStraightening; }
 	}
 	
 	public void GiveBodyPiece(BodyPieceScript bodyPiece){

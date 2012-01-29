@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class BodyPieceScript : MonoBehaviour {
 	
 	// Editor variables.
-	public float minDistance;
+	public float minDistance = 0;
 	public float percentInterpolation;
 	public float speed;
 	public float rotationSpeed;
@@ -19,6 +19,7 @@ public class BodyPieceScript : MonoBehaviour {
 	Vector3 velocity;
 	float rotationalVelocity;
 	int type;//0-number of shapes
+	private float defaultRotationSpeed;
 	
 	// Properties.
 	public int BodyPieceType { get { return isBodyPiece ? type : -1; } }
@@ -33,14 +34,25 @@ public class BodyPieceScript : MonoBehaviour {
 			type = Random.Range(0, materials.Count);
 			this.GetComponentInChildren<MeshRenderer>().material = materials[type];
 		}
+		defaultRotationSpeed = rotationSpeed;
 	}
 
 	void FixedUpdate () {
 		spine.SetActiveRecursively(player != null);
+	
+		
 		if(player == null){
 			return;
 		}
 		GameObject head = this.Head;
+
+		if(player.IsCastingStraighten)
+		{
+			this.transform.position = (head.transform.position - minDistance * head.transform.forward);
+			this.transform.rotation = Head.transform.rotation;
+		}
+
+		
 		Vector3 deltaPos = (head.transform.position - minDistance * head.transform.forward) - this.transform.position;
 		velocity = Vector3.Lerp(this.velocity, deltaPos, percentInterpolation);
 		float deltaAngle = (Vector3.Cross(this.transform.forward, head.transform.forward).y < 0 ? -1 : 1) * Vector3.Angle(this.transform.forward, head.transform.forward);
@@ -73,5 +85,11 @@ public class BodyPieceScript : MonoBehaviour {
 		if(!isBodyPiece){
 			this.GetComponentInChildren<MeshRenderer>().material.color = player.PlayerColor;
 		}
+	}
+	
+	public float RotationSpeed
+	{
+		set{ rotationSpeed = value; }
+		get{ return rotationSpeed; }
 	}
 }
