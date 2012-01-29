@@ -3,26 +3,19 @@ using System.Collections;
 
 public class RepelScript : MonoBehaviour {
 	
-	public GameObject repelExplosion;
-	public SphereCollider explosionCollider;
-	public bool repelIsArmed = false;
+	bool repelIsArmed = false;
 	private float maxForce;
 	private float currentForce;
 	private float maxRange;
 	private float forceDecayMultiplier;
 	private float growthMultiplier;
+	private float radius;
 	private int playerThatCastedRepel;
-	
-	void Start()
-	{
-		repelExplosion = this.gameObject;
-	}
+	private PlayerScript targetPlayer;
 	
 	void Awake ()
 	{
-		explosionCollider = gameObject.AddComponent("SphereCollider") as SphereCollider;
-		explosionCollider.center = Vector3.zero;
-		explosionCollider.radius = .1f;
+		radius = .1f;
 		currentForce = maxForce;
 	}
 	
@@ -31,34 +24,34 @@ public class RepelScript : MonoBehaviour {
 	{
 		if(repelIsArmed)
 		{
-			explosionCollider.isTrigger = true;
-			explosionCollider.radius += growthMultiplier;
-			currentForce *= forceDecayMultiplier;
+			radius += Time.fixedDeltaTime * growthMultiplier;
 			
-			if (explosionCollider.radius >= maxRange)
+			if ((this.transform.position - targetPlayer.transform.position).magnitude <= radius)
+			{
+				Debug.Log(playerThatCastedRepel + " casted repel on " + targetPlayer.playerIndex);
+				targetPlayer.gameObject.rigidbody.AddForce( currentForce * Vector3.Normalize(targetPlayer.transform.position - this.transform.position));
+				GameObject.Destroy(this.gameObject);
+			} else if (radius >= maxRange)
 			{
 				GameObject.Destroy(this.gameObject);
 			}
 		}
 	}
-	
-	void OnTriggerEnter(Collider other)
-	{
-		if (other.gameObject.GetComponent<PlayerScript>().playerIndex != playerThatCastedRepel)
-		{
-			Debug.Log(playerThatCastedRepel + " casted repel on " + other.gameObject.GetComponent<PlayerScript>().playerIndex);
-			other.gameObject.rigidbody.AddForce( -currentForce * Vector3.Normalize(other.transform.position - this.transform.position));
-		}
-
-	}
 
 	public void SetRepelAttributes(float _maxRange, float _maxForce, float _forceDecayMultiplier, float _growthMultiplier, int _playerIndex)
 	{
 		this.maxForce = _maxForce;
+		this.currentForce = maxForce;
 		this.maxRange = _maxRange;
 		this.forceDecayMultiplier = _forceDecayMultiplier;
 		this.growthMultiplier = _growthMultiplier;
 		this.playerThatCastedRepel = _playerIndex;
+		
+		foreach(Object gameObject in GameObject.FindObjectsOfType(typeof(PlayerScript))){
+			PlayerScript player = gameObject as PlayerScript;
+			if(player.playerIndex == this.playerThatCastedRepel) continue;
+			targetPlayer = player;
+		}
 	}
 	
 	public float MaxForce
