@@ -188,7 +188,8 @@ public class PlayerScript : MonoBehaviour {
 		
 		if ((Time.realtimeSinceStartup - nextTime > Straighten.whipSpeedInSeconds) && isStraightening)
 		{	
-			if (straightenIndex < pieces.Count){
+			if (straightenIndex < pieces.Count)
+			{
 				GameObject head = nextPiece.Previous.Value;
 				nextPiece.Value.transform.position = (head.transform.position - 1 * head.transform.forward);
 				nextPiece.Value.transform.rotation = head.transform.rotation;
@@ -197,7 +198,8 @@ public class PlayerScript : MonoBehaviour {
 				Debug.Log(nextTime);
 				nextPiece = nextPiece.Next;
 			}
-			else{
+			else
+			{
 				isStraightening = false;
 				straightenIsOnCooldown = true;
 				straightenLastCastTime = Time.realtimeSinceStartup;
