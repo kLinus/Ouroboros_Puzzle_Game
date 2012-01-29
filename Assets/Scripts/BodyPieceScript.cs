@@ -45,14 +45,6 @@ public class BodyPieceScript : MonoBehaviour {
 			return;
 		}
 		GameObject head = this.Head;
-
-		if(player.IsCastingStraighten)
-		{
-			this.transform.position = (head.transform.position - minDistance * head.transform.forward);
-			this.transform.rotation = Head.transform.rotation;
-		}
-
-		
 		Vector3 deltaPos = (head.transform.position - minDistance * head.transform.forward) - this.transform.position;
 		velocity = Vector3.Lerp(this.velocity, deltaPos, percentInterpolation);
 		float deltaAngle = (Vector3.Cross(this.transform.forward, head.transform.forward).y < 0 ? -1 : 1) * Vector3.Angle(this.transform.forward, head.transform.forward);

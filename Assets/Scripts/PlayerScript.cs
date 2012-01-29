@@ -35,7 +35,7 @@ public class PlayerScript : MonoBehaviour {
 	
 	[System.Serializable]
 	public class StraightenProperties{
-		public float rotationSpeed;
+		public float whipSpeedInSeconds;
 		public float cooldown;
 	}public StraightenProperties Straighten;
 	
@@ -186,7 +186,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 		}
 		
-		if ((Time.realtimeSinceStartup - nextTime > 1) && isStraightening)
+		if ((Time.realtimeSinceStartup - nextTime > Straighten.whipSpeedInSeconds) && isStraightening)
 		{	
 			if (straightenIndex < pieces.Count){
 				GameObject head = nextPiece.Previous.Value;
