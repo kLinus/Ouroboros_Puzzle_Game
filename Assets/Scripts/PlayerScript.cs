@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour {
 	public float rotationForce;
 	public float moveForce;
 	
+	//Burst of Speed Editor Properties
 	[System.Serializable]
 	public class BurstOfSpeedProperties {
 		public float maxForce;
@@ -16,6 +17,7 @@ public class PlayerScript : MonoBehaviour {
 		public float cooldownInSeconds;
 	}public BurstOfSpeedProperties BurstOfSpeed;
 	
+	//Repel Editor Properties
 	[System.Serializable]
 	public class RepelProperties {
 		public float maxForce;
@@ -26,24 +28,25 @@ public class PlayerScript : MonoBehaviour {
 		public GameObject repelExplosionPrefab;
 	}public RepelProperties Repel;
 	
+	//Straighten Editor Properties
 	[System.Serializable]
 	public class StraightenProperties{
 		public float cooldown;
 	}public StraightenProperties Straighten;
 	
-	//Burst of Speed abiltiy variables
+	//Burst of Speed flags
 	private bool burstOfSpeedEnabled = true;
 	private bool burstOfSpeedInUse = false;
 	private bool burstOfSpeedIsOnCooldown = false;
 	private float defaultMoveForce;
 	private float burstOfSpeedLastCastTime = 0;
 	
-	//Repel ability variables
+	//Repel ability flags
 	private bool repelEnabled = true;
 	private bool repelIsOnCooldown = false;
 	private float repelLastCastTime = 0;
 	
-	//Straighten ability variables
+	//Straighten ability flags
 	private bool straightenEnabled = true;
 	private bool straightenIsOnCooldown = false;
 	private float straightenLastCastTime = 0;
@@ -67,6 +70,7 @@ public class PlayerScript : MonoBehaviour {
 	{
 
 		//Burst of Speed Ability
+		#region Burst of Speed
 		if(burstOfSpeedEnabled || burstOfSpeedInUse)
 		{
 			bool shift = (playerIndex == 1 && Input.GetKey(p1_BurstOfSpeedKey)) || (playerIndex == 2 && Input.GetKey(p2_BurstOfSpeedKey));
@@ -90,8 +94,10 @@ public class PlayerScript : MonoBehaviour {
 				}
 			}
 		}
+		#endregion
 		
 		//Repel Ability
+		#region Repel
 		if(repelEnabled)
 		{
 			//Debug.Log("Repel is ready.");	
@@ -109,10 +115,12 @@ public class PlayerScript : MonoBehaviour {
 				//Debug.Log("Repel has been used");
 			}
 		}
+		#endregion
 		
 		//Straighten Ability
 		
 		
+		#region Movement
 		//Movement
 		bool left = (playerIndex == 1 && Input.GetKey(KeyCode.LeftArrow)) || (playerIndex == 2 && Input.GetKey(KeyCode.A));
 		bool right = (playerIndex == 1 && Input.GetKey(KeyCode.RightArrow)) || (playerIndex == 2 && Input.GetKey(KeyCode.D));
@@ -134,7 +142,9 @@ public class PlayerScript : MonoBehaviour {
 		{
 			this.rigidbody.AddForce(Time.fixedDeltaTime * moveForce * -this.transform.forward);
 		}
+	#endregion
 		
+		#region Cooldown Checks
 		//Check cooldowns
 		if (burstOfSpeedIsOnCooldown){
 			if (Time.realtimeSinceStartup - burstOfSpeedLastCastTime > BurstOfSpeed.cooldownInSeconds)
@@ -153,6 +163,7 @@ public class PlayerScript : MonoBehaviour {
 				//Debug.Log("Repel is cooled down for " + playerIndex);
 			}
 		}
+		#endregion
 		
 	}
 	
