@@ -1,10 +1,3 @@
-Ouroboros_Puzzle_Game - You are an entity comprised of puzzle pieces.
-	GOAL:  Connect 3 of your puzzle pieces to decrease the size of your entity
-	GOAL2: Defeat your enemy by connecting more of your own pieces and completing your body first
+Ouroboros_Puzzle_Game - You are an entity comprised of puzzle pieces.  Battle your enemy by taking his pieces.  Combine pieces in order to increase your speed, rotation, and devouring delay.
 
-Movement - Spring based movement
--HEAD -> Doubly Linked List of pieces
---CHILDREN -> pieces of a certain shape 
-
-Collision - 2D Sprite on top of plane
-
+This game is an entry for the Global Game Jam 2012.  The theme of the jam was Ouroboros (http://en.wikipedia.org/wiki/Ouroboros).  The original concept was to create a puzzle game of a snake having to eat it's own tail to make matches.  However, the team that was assembled for the project was composed of competitive game developers.  We then decided to turn it into a 2-Player strategy/fighter.  
